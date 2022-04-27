@@ -1,0 +1,24 @@
+{
+  "name": "backend-mm",
+  "version": "1.0.0",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:dev": "nodemon start",
+    "start": "npm start"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.18.0",
+    "express-validator": "^6.14.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.3.1",
+    "nodemon": "^2.0.15",
+    "reg-log-auth": "^1.0.2"
+  },
+  "author": "",
+  "license": "ISC"
+}
