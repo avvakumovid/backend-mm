@@ -1,11 +1,14 @@
-import {Router} from 'express';
-import authMiddleware from '../middleware/authMiddleware.js';
-import UserController from '../controller/userController.js';
+import { Router } from "express";
+import authMiddleware from "../middleware/authMiddleware.js";
+import UserController from "../controller/userController.js";
 
+const router = new Router();
 
-const router = new Router()
+router.post("/addTransaction", authMiddleware, UserController.addTransaction);
+router.put(
+  "/removeTransaction",
+  authMiddleware,
+  UserController.deleteTransaction
+);
 
-router.post('/addTransaction', authMiddleware, UserController.addTransaction)
-
-
-export default router
+export default router;

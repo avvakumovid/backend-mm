@@ -66,16 +66,45 @@ class UserService {
     responseUser.user.totalMoney += responseTransaction.transaction.summa;
 
     await responseUser.user.save();
-    // await responseUser.user.save(function(error) {
-    //     if (!error) {
-    //         User.find({})
-    //             .populate('income')
-    //             .exec(function(error, income) {
-    //                 console.log(JSON.stringify(income, null, "\t"))
-    //             })
-    //     }
-    // });
     return { status: 200, message: "Транзакция проведена" };
+  }
+
+  async deleteTransaction(userId, transactionId, type) {
+    // const responseUser = await this.getUser(username);
+    // if (responseUser.status > 200) {
+    //   return responseUser;
+    // }
+    const response = await TransactionService.removeTransactionById(
+      transactionId
+    );
+
+    if (response.status > 200) {
+      return transaction;
+    }
+
+    const { id, summa } = response;
+    // const u = await User.findOne({ username });
+
+    // User.findByIdAndUpdate({
+    //   totalMoney: this.totalMoney - totalMoney,
+    // });
+    User.findByIdAndUpdate(
+      userId,
+      // { totalMoney: 239 },
+      {
+        $pull: { [type]: id },
+        $inc: { totalMoney: -parseInt(summa) },
+      },
+
+      function (err, model) {
+        if (err) {
+          console.log(err);
+        }
+      }
+    );
+
+    // await responseUser.save();
+    return { status: 200, message: "Транзакция удалена" };
   }
 }
 
