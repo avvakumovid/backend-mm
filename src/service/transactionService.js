@@ -12,7 +12,7 @@ class TransactionService {
     const newTransaction = new Transaction({
       categories: response.categories,
       summa,
-      name
+      name,
     });
 
     await newTransaction.save();
@@ -52,6 +52,21 @@ class TransactionService {
     // }
 
     return { status: 200, id, summa };
+  }
+
+  async updateTransactionById(id, changes) {
+    try {
+      const transaction = Transaction.findByIdAndUpdate(
+        id,
+        { $set: changes },
+        function (err, trans) {
+          console.log(trans);
+        }
+      );
+      return { status: 200, message: "Транзакция обновленна" };
+    } catch (e) {
+      return { status: 400, message: e.message };
+    }
   }
 }
 

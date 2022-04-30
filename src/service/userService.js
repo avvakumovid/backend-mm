@@ -1,4 +1,5 @@
 import User from "../model/user.js";
+import categoriesService from "./categoriesService.js";
 import TransactionService from "./transactionService.js";
 
 class UserService {
@@ -100,14 +101,68 @@ class UserService {
     return { status: 200, message: "Транзакция удалена" };
   }
 
-  async updateTransaction(transactionId, changes) {
-    const response = await TransactionService.removeTransactionById(
-      transactionId
+  async updateTransaction(
+    userId,
+    transactionId,
+    type,
+    name,
+    summa,
+    categoriesName
+  ) {
+    const responseUser = await this.getUserById(userId);
+    if (responseUser.status > 200) {
+      return responseUser;
+    }
+
+    const UserTransaction = responseUser.user[type].find(
+      t => t.id === transactionId
     );
 
-    if (response.status > 200) {
-      return transaction;
+    if (!UserTransaction) {
+      return { status: 400, message: "Транзакция не найдена" };
     }
+    const changes = {};
+    if (categoriesName) {
+      const responseCategories = await categoriesService.getCategoriesByName(
+        categoriesName
+      );
+      if (responseCategories.status > 200) {
+        return responseCategories;
+      }
+      changes.categories = responseCategories.categories;
+    }
+    if (name) {
+      changes.name = name;
+    }
+    if (summa) {
+      // let oldTotalMoney = responseUser.user.totalMoney;
+      let money = -parseInt(UserTransaction.summa) + parseInt(summa);
+
+      changes.summa = summa;
+      User.findByIdAndUpdate(
+        userId,
+        // { totalMoney: 239 },
+        {
+          $inc: { totalMoney: money },
+        },
+
+        function (err, model) {
+          if (err) {
+            console.log(err);
+          }
+        }
+      );
+    }
+    if (name) {
+      changes.name = name;
+    }
+
+    const response = await TransactionService.updateTransactionById(
+      transactionId,
+      changes
+    );
+
+    return response;
   }
 }
 

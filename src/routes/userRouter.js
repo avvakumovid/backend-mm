@@ -22,5 +22,10 @@ router.put(
   authMiddleware,
   UserController.deleteTransaction
 );
+router.put(
+  "/updateTransaction",
+  authMiddleware,
+  UserController.updateTransaction
+);
 
 export default router;

@@ -73,6 +73,21 @@ class UserController {
     );
     return res.status(response.status).json(response.message);
   }
+
+  async updateTransaction(req, res) {
+    const { transactionId, type, name, summa, categoriesName } = req.body;
+    const userId = req.user.id;
+
+    const response = await UserService.updateTransaction(
+      userId,
+      transactionId,
+      type,
+      name,
+      summa,
+      categoriesName
+    );
+    return res.status(response.status).json(response.message);
+  }
 }
 
 export default new UserController();
