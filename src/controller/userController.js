@@ -1,4 +1,5 @@
 import UserService from "../service/userService.js";
+import { validationResult } from "express-validator";
 
 class UserController {
   async getAllUsers(req, res) {
@@ -46,13 +47,18 @@ class UserController {
   }
 
   async addTransaction(req, res) {
-    const { categoriesName, summa, type } = req.body;
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      return res.status(400).json({ message: "Ошибка при регистрации", error });
+    }
+    const { categoriesName, summa, type, name } = req.body;
     const username = req.user.username;
     const response = await UserService.addTransaction(
       username,
       categoriesName,
       summa,
-      type
+      type,
+      name
     );
     return res.status(response.status).json(response.message);
   }
