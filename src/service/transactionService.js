@@ -2,7 +2,7 @@ import Transaction from "../model/transaction.js";
 import categoriesService from "./categoriesService.js";
 
 class TransactionService {
-  async createTransaction(categoriesName, summa) {
+  async createTransaction(categoriesName, summa, name) {
     const response = await categoriesService.getCategoriesByName(
       categoriesName
     );
@@ -12,6 +12,7 @@ class TransactionService {
     const newTransaction = new Transaction({
       categories: response.categories,
       summa,
+      name
     });
 
     await newTransaction.save();

@@ -49,14 +49,15 @@ class UserService {
     return { status: 400, message: "Список пользователей пуст" };
   }
 
-  async addTransaction(username, categoriesName, summa, type) {
+  async addTransaction(username, categoriesName, summa, type, name) {
     const responseUser = await this.getUser(username);
     if (responseUser.status > 200) {
       return responseUser;
     }
     const responseTransaction = await TransactionService.createTransaction(
       categoriesName,
-      summa
+      summa,
+      name
     );
     if (responseTransaction.status !== 200) {
       return responseTransaction;
@@ -70,10 +71,6 @@ class UserService {
   }
 
   async deleteTransaction(userId, transactionId, type) {
-    // const responseUser = await this.getUser(username);
-    // if (responseUser.status > 200) {
-    //   return responseUser;
-    // }
     const response = await TransactionService.removeTransactionById(
       transactionId
     );
@@ -83,11 +80,7 @@ class UserService {
     }
 
     const { id, summa } = response;
-    // const u = await User.findOne({ username });
 
-    // User.findByIdAndUpdate({
-    //   totalMoney: this.totalMoney - totalMoney,
-    // });
     User.findByIdAndUpdate(
       userId,
       // { totalMoney: 239 },
@@ -105,6 +98,16 @@ class UserService {
 
     // await responseUser.save();
     return { status: 200, message: "Транзакция удалена" };
+  }
+
+  async updateTransaction(transactionId, changes) {
+    const response = await TransactionService.removeTransactionById(
+      transactionId
+    );
+
+    if (response.status > 200) {
+      return transaction;
+    }
   }
 }
 
